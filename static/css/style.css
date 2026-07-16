@@ -1,0 +1,51 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f7f6;
+}
+
+.navbar {
+    background: linear-gradient(135deg, #198754 0%, #146c43 100%) !important;
+}
+
+.card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-pills .nav-link {
+    color: #495057;
+    margin: 0 5px;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #198754;
+}
+
+.img-fluid {
+    max-height: 500px;
+    object-fit: contain;
+    background-color: #e9ecef;
+}
+
+input[type="file"]::file-selector-button {
+    background-color: #e9ecef;
+    border: none;
+    color: #495057;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    margin-right: 1rem;
+    font-weight: 600;
+    transition: background-color 0.15s ease-in-out;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: #dee2e6;
+}

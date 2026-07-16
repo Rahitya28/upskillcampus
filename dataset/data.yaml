@@ -1,0 +1,6 @@
+train: C:\Users\Dell\OneDrive\Desktop\Crop and Weed Detection\dataset\images\train
+val: C:\Users\Dell\OneDrive\Desktop\Crop and Weed Detection\dataset\images\val
+test: C:\Users\Dell\OneDrive\Desktop\Crop and Weed Detection\dataset\images\test
+
+nc: 2
+names: ['crop', 'weed']

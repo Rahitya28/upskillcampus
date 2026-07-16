@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop & Weed Detection AI</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fa-solid fa-leaf me-2"></i>AgriVision AI
+            </a>
+            <span class="navbar-text text-white">
+                Crop & Weed Precision Detection
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+
+        <!-- Header Section -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8 text-center">
+                <h1 class="fw-bolder text-dark mb-3">Optimize Your Harvest</h1>
+                <p class="lead text-muted">Upload a field image and our YOLOv8 model will instantly detect and separate
+                    crops from weeds, enabling targeted pesticide application.</p>
+            </div>
+        </div>
+
+        <!-- Upload Card -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-6">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5">
+
+                        {% if error %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ error }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endif %}
+
+                        <form action="/predict" method="POST" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <label for="fileUpload" class="form-label fw-bold text-secondary">Upload Field Image
+                                    (JPG, PNG)</label>
+                                <input class="form-control form-control-lg border-success" type="file" id="fileUpload"
+                                    name="file" accept="image/*" required>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow-sm">
+                                <i class="fa-solid fa-microchip me-2"></i> Run Detection
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        {% if success %}
+        <div class="row mb-5 fade-in">
+            <!-- Stats Column -->
+            <div class="col-lg-4 mb-4">
+                <div class="card shadow border-0 rounded-4 h-100">
+                    <div class="card-header bg-success text-white fw-bold py-3">
+                        <i class="fa-solid fa-chart-pie me-2"></i>Detection Analysis
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                <span><i class="fa-solid fa-seedling text-success me-2"></i>Crops Detected</span>
+                                <span class="badge bg-success rounded-pill fs-6">{{ crop_count }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                <span><i class="fa-solid fa-skull-crossbones text-danger me-2"></i>Weeds Detected</span>
+                                <span class="badge bg-danger rounded-pill fs-6">{{ weed_count }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                <span><i class="fa-solid fa-bullseye text-primary me-2"></i>Average Confidence</span>
+                                <span class="fw-bold text-dark">{{ confidence }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                <span><i class="fa-solid fa-stopwatch text-warning me-2"></i>Processing Time</span>
+                                <span class="text-muted small">{{ time }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Images Column -->
+            <div class="col-lg-8">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body p-4">
+                        <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active rounded-pill fw-bold" id="pills-annotated-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-annotated" type="button" role="tab"
+                                    aria-controls="pills-annotated" aria-selected="true">Detected Image</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill fw-bold" id="pills-original-tab"
+                                    data-bs-toggle="pill" data-bs-target="#pills-original" type="button" role="tab"
+                                    aria-controls="pills-original" aria-selected="false">Original Image</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content text-center" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-annotated" role="tabpanel"
+                                aria-labelledby="pills-annotated-tab">
+                                <img src="{{ annotated_img }}" class="img-fluid rounded border shadow-sm"
+                                    alt="Annotated Image">
+                            </div>
+                            <div class="tab-pane fade" id="pills-original" role="tabpanel"
+                                aria-labelledby="pills-original-tab">
+                                <img src="{{ original_img }}" class="img-fluid rounded border shadow-sm"
+                                    alt="Original Image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

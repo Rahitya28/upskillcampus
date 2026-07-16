@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+
+runs/
+
+*.zip
+
+*.pt
+
+.vscode/
+
+.DS_Store

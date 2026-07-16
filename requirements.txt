@@ -1,0 +1,15 @@
+# YOLOv8 Backend
+ultralytics==8.1.0
+torch
+torchvision
+opencv-python
+
+# Web Application
+Flask==3.0.0
+Werkzeug==3.0.1
+
+# Image Processing
+Pillow
+
+# Data processing (often useful)
+numpy
